@@ -57,6 +57,7 @@ public final class ServerProtocol {
     public static final String DIALOG_PARAM_DEFAULT_AUDIENCE = "default_audience";
     public static final String DIALOG_PARAM_SDK_VERSION = "sdk";
     public static final String DIALOG_REREQUEST_AUTH_TYPE = "rerequest";
+    public static final String DIALOG_REAUTHENTICATE_AUTH_TYPE = "reauthenticate";
     public static final String DIALOG_RESPONSE_TYPE_TOKEN_AND_SIGNED_REQUEST
             = "token,signed_request";
     public static final String DIALOG_RETURN_SCOPES_TRUE = "true";

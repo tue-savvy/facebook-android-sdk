@@ -431,7 +431,7 @@ class LoginClient implements Parcelable {
         private final String applicationId;
         private final String authId;
         private boolean isRerequest = false;
-
+        private boolean reauthenticate = false;
         Request(
                 LoginBehavior loginBehavior,
                 Set<String> permissions,
@@ -498,6 +498,7 @@ class LoginClient implements Parcelable {
             this.applicationId = parcel.readString();
             this.authId = parcel.readString();
             this.isRerequest = parcel.readByte() != 0 ? true : false;
+            this.reauthenticate = parcel.readByte() != 0 ? true : false;
         }
 
         @Override
@@ -513,6 +514,7 @@ class LoginClient implements Parcelable {
             dest.writeString(applicationId);
             dest.writeString(authId);
             dest.writeByte((byte)(isRerequest ? 1 : 0));
+            dest.writeByte((byte)(reauthenticate ? 1 : 0));
         }
 
         public static final Parcelable.Creator<Request> CREATOR = new Parcelable.Creator() {
@@ -526,6 +528,14 @@ class LoginClient implements Parcelable {
                 return new Request[size];
             }
         };
+
+        public boolean isReauthenticate() {
+            return reauthenticate;
+        }
+
+        public void setReauthenticate(boolean reauthenticate) {
+            this.reauthenticate = reauthenticate;
+        }
     }
 
     public static class Result implements Parcelable {

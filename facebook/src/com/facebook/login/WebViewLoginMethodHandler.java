@@ -124,6 +124,7 @@ class WebViewLoginMethodHandler extends LoginMethodHandler {
                 parameters)
                 .setE2E(e2e)
                 .setIsRerequest(request.isRerequest())
+                .setReauthenticate(request.isReauthenticate())
                 .setOnCompleteListener(listener)
                 .setTheme(FacebookSdk.getWebDialogTheme());
         loginDialog = builder.build();
@@ -221,6 +222,7 @@ class WebViewLoginMethodHandler extends LoginMethodHandler {
         static final String REDIRECT_URI = "fbconnect://success";
         private String e2e;
         private boolean isRerequest;
+        private boolean reauthenticate;
 
         public AuthDialogBuilder(Context context, String applicationId, Bundle parameters) {
             super(context, applicationId, OAUTH_DIALOG, parameters);
@@ -250,13 +252,26 @@ class WebViewLoginMethodHandler extends LoginMethodHandler {
                     ServerProtocol.DIALOG_RETURN_SCOPES_TRUE);
 
             // Set the re-request auth type for requests
-            if (isRerequest) {
+            if (isRerequest && !reauthenticate) {
                 parameters.putString(
                         ServerProtocol.DIALOG_PARAM_AUTH_TYPE,
                         ServerProtocol.DIALOG_REREQUEST_AUTH_TYPE);
             }
-
+            if (reauthenticate) {
+                parameters.putString(
+                        ServerProtocol.DIALOG_PARAM_AUTH_TYPE,
+                        ServerProtocol.DIALOG_REAUTHENTICATE_AUTH_TYPE);
+            }
             return new WebDialog(getContext(), OAUTH_DIALOG, parameters, getTheme(), getListener());
+        }
+
+        public boolean isReauthenticate() {
+            return reauthenticate;
+        }
+
+        public AuthDialogBuilder setReauthenticate(boolean reauthenticate) {
+            this.reauthenticate = reauthenticate;
+            return this;
         }
     }
 

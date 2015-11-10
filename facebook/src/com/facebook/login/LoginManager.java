@@ -62,6 +62,8 @@ public class LoginManager {
     private LoginBehavior loginBehavior = LoginBehavior.NATIVE_WITH_FALLBACK;
     private DefaultAudience defaultAudience = DefaultAudience.FRIENDS;
 
+    private boolean reauthenticate = false;
+
     LoginManager() {
         Validate.sdkInitialized();
     }
@@ -341,6 +343,7 @@ public class LoginManager {
                 FacebookSdk.getApplicationId(),
                 UUID.randomUUID().toString()
         );
+        request.setReauthenticate(reauthenticate);
         request.setRerequest(AccessToken.getCurrentAccessToken() != null);
         return request;
     }
@@ -509,6 +512,17 @@ public class LoginManager {
             } else if (newToken != null) {
                 callback.onSuccess(loginResult);
             }
+        }
+    }
+
+    public boolean isReauthenticate() {
+        return reauthenticate;
+    }
+
+    public void setReauthenticate(boolean reauthenticate) {
+        this.reauthenticate = reauthenticate;
+        if (reauthenticate) {//Re-authenticate only work
+            this.setLoginBehavior(LoginBehavior.WEB_ONLY);
         }
     }
 
